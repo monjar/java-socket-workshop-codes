@@ -23,19 +23,43 @@ public class ClientHandler extends Thread {
             String userName = this.dis.readUTF();
             this.userName = userName;
             System.out.println("USER "+ userName+ " CONNECTED!");
+
+            while (true){
+                String message = dis.readUTF();
+                String[] commands = message.split("->");
+                String targetName = commands[0];
+                String messageToTarget = commands[1];
+                for (ClientHandler ch : Server.getHandlers()) {
+                    if (ch.getUserName().equals(targetName)){
+                        ch.getDos().writeUTF(userName+" SAYS: " +messageToTarget);
+                    }
+                }
+
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void sendMessage(String targetName){
-
-
+    public String getUserName() {
+        return userName;
     }
 
-    public String getMessage(){
-
-
+    public DataOutputStream getDos() {
+        return dos;
     }
+
+    public DataInputStream getDis() {
+        return dis;
+    }
+    //    public void sendMessage(String targetName){
+//
+//
+//    }
+
+//    public String getMessage(){
+//        dos.writeUTF();
+//
+//    }
 
 }
