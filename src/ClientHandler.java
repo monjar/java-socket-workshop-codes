@@ -24,20 +24,28 @@ public class ClientHandler extends Thread {
             this.userName = userName;
             System.out.println("USER "+ userName+ " CONNECTED!");
 
-            while (true){
-                String message = dis.readUTF();
-                String[] commands = message.split("->");
-                String targetName = commands[0];
-                String messageToTarget = commands[1];
-                for (ClientHandler ch : Server.getHandlers()) {
-                    if (ch.getUserName().equals(targetName)){
-                        ch.getDos().writeUTF(userName+" SAYS: " +messageToTarget);
-                    }
-                }
+            while (true)
+                getMessageFromClient(userName);
 
-            }
+
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void getMessageFromClient(String userName) throws IOException {
+        String message = dis.readUTF();
+        String[] commands = message.split("->");
+        String targetName = commands[0];
+        String messageToTarget = commands[1];
+        sendMessageToTargets(userName, targetName, messageToTarget);
+    }
+
+    private void sendMessageToTargets(String userName, String targetName, String messageToTarget) throws IOException {
+        for (ClientHandler ch : Server.getHandlers()) {
+            if (ch.getUserName().equals(targetName)){
+                ch.getDos().writeUTF(userName+" SAYS: " +messageToTarget);
+            }
         }
     }
 
@@ -52,14 +60,6 @@ public class ClientHandler extends Thread {
     public DataInputStream getDis() {
         return dis;
     }
-    //    public void sendMessage(String targetName){
-//
-//
-//    }
 
-//    public String getMessage(){
-//        dos.writeUTF();
-//
-//    }
 
 }

@@ -18,7 +18,6 @@ public class Server {
                 Socket socket = serverSocket.accept();
                 DataInputStream dis = new DataInputStream(socket.getInputStream());
                 DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-//                System.out.println("CLIENT SAID: "+ dis.readUTF());
                 ClientHandler clientHandler = new ClientHandler(socket,dos,dis);
                 handlers.add(clientHandler);
                 clientHandler.start();

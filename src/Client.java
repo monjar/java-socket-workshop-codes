@@ -12,17 +12,25 @@ public class Client {
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             Scanner scanner = new Scanner(System.in);
-            String userName = scanner.nextLine();
-            dos.writeUTF(userName);
+            getUserNameAndSendToServer(dos, scanner);
             MessageListener messageListener = new MessageListener(dis);
             messageListener.start();
-            while (true) {
-                String message = scanner.nextLine();
-                dos.writeUTF(message);
-                dos.flush();
-            }
+            getUserInput(dos, scanner);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void getUserNameAndSendToServer(DataOutputStream dos, Scanner scanner) throws IOException {
+        String userName = scanner.nextLine();
+        dos.writeUTF(userName);
+    }
+
+    private static void getUserInput(DataOutputStream dos, Scanner scanner) throws IOException {
+        while (true) {
+            String message = scanner.nextLine();
+            dos.writeUTF(message);
+            dos.flush();
         }
     }
 
